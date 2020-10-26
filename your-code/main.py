@@ -1,45 +1,56 @@
 #1. Import the NUMPY package under the name np.
 
-
+import numpy as np
 
 #2. Print the NUMPY version and the configuration.
 
-
+print(np.version.version)
 
 #3. Generate a 2x3x5 3-dimensional array with random values. Assign the array to variable "a"
 # Challenge: there are at least three easy ways that use numpy to generate random arrays. How many ways can you find?
 
-
+a = np.random.random((2,3,5))
+a1 = np.random.randint(1,100, size=(2,3,5))
+a2 = np.arange(30).reshape(2,3,5)
 
 #4. Print a.
 
-
+print('\n Array a: \n\n', a, '\n')
+print('\n Array a1: \n\n', a1, '\n')
+print('\n Array a2: \n\n', a2, '\n')
 
 #5. Create a 5x2x3 3-dimensional array with all values equaling 1.
 #Assign the array to variable "b"
 
-
+b = np.ones((5,2,3))
 
 #6. Print b.
 
-
+print('\n Array b: \n\n', b, '\n')
 
 #7. Do a and b have the same size? How do you prove that in Python code?
 
-
-
+if a.size == b.size:
+    print('Both Arrays a & b have the same size of %s' % b.size, '\n')
 
 #8. Are you able to add a and b? Why or why not?
 
-
+"It is not possible to add a and b through numpy.add() method as both of them have different\
+shapes (a = 2x3x5 & b = 5,2,3), as arrays'operations can only be done if both arrays have the\
+same structure ..."
 
 #9. Transpose b so that it has the same structure of a (i.e. become a 2x3x5 array). Assign the transposed array to varialbe "c".
 
-
+c = b.reshape((2,3,5)) # transpose method returned c.shape = (3,2,5)
+print('\n Array c: \n\n', c, '\n')
+print(c.shape, '\n')
 
 #10. Try to add a and c. Now it should work. Assign the sum to varialbe "d". But why does it work now?
 
-
+d = np.add(a,c)
+print('\n Array d: \n\n', d, '\n')
+"Now the adding operation is working since both of the arrays have the same structure,\
+which can be defined as 2 groups aand three lists of 5 elements"
 
 #11. Print a and d. Notice the difference and relation of the two array in terms of the values? Explain.
 
