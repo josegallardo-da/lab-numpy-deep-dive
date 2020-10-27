@@ -12,12 +12,14 @@ print(np.version.version)
 a = np.random.random((2,3,5))
 a1 = np.random.randint(1,100, size=(2,3,5))
 a2 = np.arange(30).reshape(2,3,5)
+a3 = np.empty((2,3,5))
 
 #4. Print a.
 
 print('\n Array a: \n\n', a, '\n')
 print('\n Array a1: \n\n', a1, '\n')
 print('\n Array a2: \n\n', a2, '\n')
+print('\n Array a3: \n\n', a3, '\n')
 
 #5. Create a 5x2x3 3-dimensional array with all values equaling 1.
 #Assign the array to variable "b"
@@ -49,32 +51,42 @@ print(c.shape, '\n')
 
 d = np.add(a,c)
 print('\n Array d: \n\n', d, '\n')
-"Now the adding operation is working since both of the arrays have the same structure,\
-which can be defined as 2 groups aand three lists of 5 elements"
+"Now the adding operation is working since both of the arrays have the same structure or 'shape',\
+which can be defined as 2 groups containing three lists of 5 elements each."
 
 #11. Print a and d. Notice the difference and relation of the two array in terms of the values? Explain.
 
+print('\n Array a: \n\n', a, '\n')
+print('\n Array d: \n\n', d, '\n')
 
-
+"Both of the arrays have the same shape or structure of (2,3,5), which also means they have\
+the same size of 30 elements. In terms of values the difference relies in a value of 1, as\
+all of the elements within Array d are the result of adding 1 to each of the values found in\
+Array a, which was the operation done with numpy.add method."
 
 #12. Multiply a and c. Assign the result to e.
 
-
+e = np.multiply(a,c)
+print('\n Array e: \n\n', e, '\n')
 
 #13. Does e equal to a? Why or why not?
 
-
-
+"Yes, arrays e and a are equal because all the elements within e are the result of multiplying \
+each element of a by 1 ..."
 
 #14. Identify the max, min, and mean values in d. Assign those values to variables "d_max", "d_min", and "d_mean"
 
-
-
+d_max = d.max()
+d_min = d.min()
+d_mean = d.mean()
+print('The max value in d is ...',d_max,'\n')
+print('The min value in d is ...',d_min,'\n')
+print('The mean in d is ...',d_mean, '\n')
 
 #15. Now we want to label the values in d. First create an empty array "f" with the same shape (i.e. 2x3x5) as d using `np.empty`.
 
-
-
+f = np.empty((2,3,5))
+print('\n Array f: \n\n', f, '\n')
 
 """
 #16. Populate the values in f. For each value in d, if it's larger than d_min but smaller than d_mean, assign 25 to the corresponding value in f.
@@ -86,8 +98,23 @@ In the end, f should have only the following values: 0, 25, 50, 75, and 100.
 Note: you don't have to use Numpy in this question.
 """
 
+def evaluate(x, maxi, mini, mean):
+    if x == mini:
+        x = 0
+    elif x > mini and x < mean:
+        x = 25
+    elif x == mean:
+        x = 50
+    elif x > mean and x < maxi:
+        x = 75
+    elif x == maxi:
+        x = 100
+    else:
+        x = '?'
+    return x
 
-
+f = map(evaluate, d)
+print(list(f))
 
 """
 #17. Print d and f. Do you have your expected f?
