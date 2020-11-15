@@ -37,21 +37,22 @@ if a.size == b.size:
 
 #8. Are you able to add a and b? Why or why not?
 
-"It is not possible to add a and b through numpy.add() method as both of them have different\
-shapes (a = 2x3x5 & b = 5,2,3), as arrays'operations can only be done if both arrays have the\
+"It is not possible to add a and b through numpy.add() method as both have different\
+shapes (a = 2x3x5 & b = 5,2,3), and  arrays'operations can only be done if both arrays have the\
 same structure ..."
 
 #9. Transpose b so that it has the same structure of a (i.e. become a 2x3x5 array). Assign the transposed array to varialbe "c".
 
 c = b.reshape((2,3,5)) # transpose method returned c.shape = (3,2,5)
 print('\n Array c: \n\n', c, '\n')
-print(c.shape, '\n')
+print("Transposed Array's Structure:",c.shape, '\n')
 
 #10. Try to add a and c. Now it should work. Assign the sum to varialbe "d". But why does it work now?
 
 d = np.add(a,c)
 print('\n Array d: \n\n', d, '\n')
-"Now the adding operation is working since both of the arrays have the same structure or 'shape',\
+
+"Now the adding operation is working since both have the same structure or 'shape'\
 which can be defined as 2 groups containing three lists of 5 elements each."
 
 #11. Print a and d. Notice the difference and relation of the two array in terms of the values? Explain.
@@ -71,7 +72,7 @@ print('\n Array e: \n\n', e, '\n')
 
 #13. Does e equal to a? Why or why not?
 
-"Yes, arrays e and a are equal because all the elements within e are the result of multiplying \
+"Yes, arrays e and a are equal because all the elements within e are the result of multiplying\
 each element of a by 1 ..."
 
 #14. Identify the max, min, and mean values in d. Assign those values to variables "d_max", "d_min", and "d_mean"
@@ -86,7 +87,7 @@ print('The mean in d is ...',d_mean, '\n')
 #15. Now we want to label the values in d. First create an empty array "f" with the same shape (i.e. 2x3x5) as d using `np.empty`.
 
 f = np.empty((2,3,5))
-print('\n Array f: \n\n', f, '\n')
+print('Array (empty) f: \n\n', f, '\n')
 
 """
 #16. Populate the values in f. For each value in d, if it's larger than d_min but smaller than d_mean, assign 25 to the corresponding value in f.
@@ -98,23 +99,45 @@ In the end, f should have only the following values: 0, 25, 50, 75, and 100.
 Note: you don't have to use Numpy in this question.
 """
 
-def evaluate(x, maxi, mini, mean):
-    if x == mini:
-        x = 0
-    elif x > mini and x < mean:
-        x = 25
-    elif x == mean:
-        x = 50
-    elif x > mean and x < maxi:
-        x = 75
-    elif x == maxi:
-        x = 100
-    else:
-        x = '?'
-    return x
+    # this function is effective, but the problem with it is that it modifies the original array.
+def evaluate(array, maxi, mini, mean):
+    for a in range(len(array)):
+        for lst in range(len(array[a])):
+            for x in range(len(array[a][lst])):                
+                if array[a][lst][x] == mini:
+                    array[a][lst][x] = 0
+                elif array[a][lst][x] > mini and array[a][lst][x] < mean:
+                    array[a][lst][x] = 25
+                elif array[a][lst][x] == mean:
+                    array[a][lst][x] = 50
+                elif array[a][lst][x] > mean and array[a][lst][x] < maxi:
+                    array[a][lst][x] = 75
+                elif array[a][lst][x] == maxi:
+                    array[a][lst][x] = 100
+                else:
+                    array[a][lst][x] = '?'
+    return array
 
-f = map(evaluate, d)
-print(list(f))
+    # this version is an alternative by converting the array into a list
+    # also this version is better as it doesnt create changes on the original array
+def evaluate2(array, maxi, mini, mean):
+    new_array = []
+    for a in array.flatten(): # array.flatten().tolist() # list(array.flatten())
+        if a == mini: # we can have the same approach of using indexes like the past function but it would only make it more complicated
+            new_array.append(0)
+        elif a > mini and a < mean:
+            new_array.append(25)
+        elif a == mean:
+            new_array.append(50)
+        elif a > mean and a < maxi:
+            new_array.append(75)
+        elif a == maxi:
+            new_array.append(100)
+        else:
+            new_array.append('?')
+    return np.reshape(new_array, (2,3,5)) 
+
+f = evaluate2(d, d_max, d_min, d_mean)
 
 """
 #17. Print d and f. Do you have your expected f?
@@ -137,6 +160,19 @@ array([[[ 75.,  75.,  75.,  25.,  75.],
         [ 25.,  75.,   0.,  75.,  75.]]])
 """
 
+"Note: By using function evaluate(), the data of d is overwritten, so d and f are the exact same.\
+To avoid this situation, I decided to rather employ function evaluate2(), which creates a new array\
+from scratch."
+
+print('Array d:\n\n', d)
+print('\nNumber of Elements in d:', len(d.flatten()), 'elements.\n')
+
+print('The max value in d is ...',d_max)
+print('The min value in d is ...',d_min)
+print('The mean in d is ...',d_mean)
+
+print('\nNew Array f:\n\n', f)
+print('\nNumber of Elements in f:', len(f.flatten()), 'elements.')
 
 """
 #18. Bonus question: instead of using numbers (i.e. 0, 25, 50, 75, and 100), how to use string values 
@@ -150,3 +186,11 @@ array([[[ 'D',  'D',  'D',  'B',  'D'],
         [ 'B',  'D',   'A',  'D', 'D']]])
 Again, you don't need Numpy in this question.
 """
+
+bonus = map(lambda x: 'A' if x==0 else('B' if x==25 \
+    else('C' if x==50 else('D' if x==75 else('E' if x==100 else '?')))), f.flatten())
+# FYI: this map and lambda function isnt practical but for me it seemed more practical for this question.
+bonus_f = np.reshape(list(bonus), (2,3,5))
+
+print('\nBonus Array f:\n\n', bonus_f)
+print('\nNumber of Elements in Bonus Array f:', len(bonus_f.flatten()), 'elements.')
